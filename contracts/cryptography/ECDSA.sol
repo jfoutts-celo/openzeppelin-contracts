@@ -9,21 +9,9 @@ pragma solidity ^0.6.0;
 library ECDSA {
     /**
      * @dev Returns the address that signed a hashed message (`hash`) with
-     * `signature`. This address can then be used for verification purposes.
+     * `signature` by invoking `recoverSigner`.
      *
-     * The `ecrecover` EVM opcode allows for malleable (non-unique) signatures:
-     * this function rejects them by requiring the `s` value to be in the lower
-     * half order, and the `v` value to be either 27 or 28.
-     *
-     * NOTE: This call _does not revert_ if the signature is invalid, or
-     * if the signer is otherwise unable to be retrieved. In those scenarios,
-     * the zero address is returned.
-     *
-     * IMPORTANT: `hash` _must_ be the result of a hash operation for the
-     * verification to be secure: it is possible to craft signatures that
-     * recover to arbitrary addresses for non-hashed data. A safe way to ensure
-     * this is by receiving a hash of the original message (which may otherwise
-     * be too long), and then calling {toEthSignedMessageHash} on it.
+     * See {recoverSigner}.
      */
     function recover(bytes32 hash, bytes memory signature) internal pure returns (address) {
         // Check the signature length
@@ -48,6 +36,25 @@ library ECDSA {
         return recoverSigner(hash, v, r, s);
     }
 
+    /**
+     * @dev Returns the address that signed a hashed message (`hash`) with
+     * the signature parameters `v`, `r`, `s`. This address can then be used
+     * for verification purposes.
+     *
+     * The `ecrecover` EVM opcode allows for malleable (non-unique) signatures:
+     * this function rejects them by requiring the `s` value to be in the lower
+     * half order, and the `v` value to be either 27 or 28.
+     *
+     * NOTE: This call _does not revert_ if the signature is invalid, or
+     * if the signer is otherwise unable to be retrieved. In those scenarios,
+     * the zero address is returned.
+     *
+     * IMPORTANT: `hash` _must_ be the result of a hash operation for the
+     * verification to be secure: it is possible to craft signatures that
+     * recover to arbitrary addresses for non-hashed data. A safe way to ensure
+     * this is by receiving a hash of the original message (which may otherwise
+     * be too long), and then calling {toEthSignedMessageHash} on it.
+     */
     function recoverSigner(bytes32 hash, uint8 v, bytes32 r, bytes32 s) internal pure returns (address) {
         // EIP-2 still allows signature malleability for ecrecover(). Remove this possibility and make the signature
         // unique. Appendix F in the Ethereum Yellow paper (https://ethereum.github.io/yellowpaper/paper.pdf), defines
